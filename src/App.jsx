@@ -1,46 +1,64 @@
-import { useState} from 'react'
-import { ChatInput } from './components/ChatInput';
-import { ChatMessages } from './components/ChatMessages';
+import { useState } from 'react';
+import { Chatbot } from 'supersimpledev';
+import './ChatInput.css';
 
+export function ChatInput({ chatMessages, setChatMessages }) {
+  const [inputText, setInputText] = useState('');
 
-import './App.css'
+  function saveInputText(event) {
+    setInputText(event.target.value);
+  }
 
+  function sendMessage() {
+    if (inputText.trim() === '') return;
 
-    
+    const userMessage = inputText.trim();
 
-function App() {
-        const [chatMessages, setChatMessages] = useState([{
-          message: 'hello chatbot',
-          sender: 'user',
-          id: 'id1'
-        }, {
-          message: 'Hello! How can I help you?',
-          sender: 'robot',
-          id: 'id2'
-        }, {
-          message: 'can you get me todays date?',
-          sender: 'user',
-          id: 'id3'
-        }, {
-          message: 'Today is September 27',
-          sender: 'robot',
-          id: 'id4'
-        }]);
-        // const [chatMessages, setChatMessages] = array;
-        // const chatMessages = array[0];
-        // const setChatMessages = array[1];
-
-        return (
-          <div className="app-container">
-            <ChatMessages
-              chatMessages={chatMessages}
-            />
-            <ChatInput
-              chatMessages={chatMessages}
-              setChatMessages={setChatMessages}
-            />
-          </div>
-        );
+    const newChatMessages = [
+      ...chatMessages,
+      {
+        message: userMessage,
+        sender: 'user',
+        id: crypto.randomUUID()
       }
+    ];
 
-export default App;
+    setChatMessages(newChatMessages);
+
+    const response = Chatbot.getResponse(userMessage);
+
+    setChatMessages([
+      ...newChatMessages,
+      {
+        message: response,
+        sender: 'robot',
+        id: crypto.randomUUID()
+      }
+    ]);
+
+    setInputText('');
+  }
+
+  return (
+    <div className="chat-input-container">
+      <input
+        className="chat-input"
+        placeholder="Send a message to Chatbot"
+        value={inputText}
+        onChange={saveInputText}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            sendMessage();
+          }
+        }}
+      />
+
+      <button
+        onClick={sendMessage}
+        className="send-button"
+      >
+        Send
+      </button>
+    </div>
+  );
+}
