@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Chatbot } from 'supersimpledev';
 import './ChatInput.css';
 
+//state variable inputText is used to store the current value of the input field, and setInputText is a function that updates this state variable. The initial value of inputText is an empty string.
+
 export function ChatInput({ chatMessages, setChatMessages }) {
   const [inputText, setInputText] = useState('');
 
