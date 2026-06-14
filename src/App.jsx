@@ -6,7 +6,7 @@ import { ChatMessages } from './components/ChatMessages';
 import './App.css'
 
 
-    
+    ///define a state variable called chatMessages and a function to update it called setChatMessages using the useState hook. The initial value of chatMessages is an array of objects, where each object represents a chat message with properties for the message text, sender, and a unique id.
 
 function App() {
         const [chatMessages, setChatMessages] = useState([{
